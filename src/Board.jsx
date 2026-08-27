@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Background, BackgroundVariant, ReactFlow, useReactFlow } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
@@ -66,7 +66,6 @@ export default function Board() {
   const [dimOthers, setDimOthers] = useState(true)
   const [show, setShow] = useState({ hud: true, index: true, keys: true, pip: false })
   const { fitView } = useReactFlow()
-  const prevVisible = useRef(new Set())
 
   const step = steps[index]
   const frame = TIMELINE[index]
@@ -89,12 +88,17 @@ export default function Board() {
     [step, visibleNodes],
   )
 
+  /* ---- what this step reveals, derived rather than remembered ---- */
+  const revealed = useMemo(() => {
+    const before = index > 0 ? TIMELINE[index - 1].nodes : new Set()
+    return new Set([...frame.nodes].filter((id) => !before.has(id)))
+  }, [index, frame])
+
   /* ---- nodes appearing for the first time get the reveal animation ---- */
   const nodes = useMemo(() => {
-    const fresh = prevVisible.current
     return allNodes.map((n) => {
       const visible = visibleNodes.has(n.id)
-      const isNew = visible && !fresh.has(n.id)
+      const isNew = visible && revealed.has(n.id)
       const dim = dimOthers && focusSet && !focusSet.has(n.id)
       return {
         ...n,
@@ -102,7 +106,7 @@ export default function Board() {
         className: [n.className, isNew ? 'nd-in' : '', dim ? 'is-dim' : ''].filter(Boolean).join(' '),
       }
     })
-  }, [visibleNodes, focusSet, dimOthers])
+  }, [visibleNodes, revealed, focusSet, dimOthers])
 
   const edges = useMemo(
     () =>
@@ -117,10 +121,6 @@ export default function Board() {
       }),
     [visibleEdges, focusSet, dimOthers],
   )
-
-  useEffect(() => {
-    prevVisible.current = new Set(visibleNodes)
-  }, [visibleNodes])
 
   /* ---- camera ---- */
   const frameCamera = useCallback(() => {
@@ -212,7 +212,7 @@ export default function Board() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [go, fitView, frameCamera, toggle])
+  }, [go, fitView, frameCamera, toggle, show])
 
   return (
     <div className="board">

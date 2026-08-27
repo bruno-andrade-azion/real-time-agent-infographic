@@ -24,14 +24,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
 
-	  # If you want to change package manager, change the command below and add the necessary configurations
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Install Azion CLI
         run: |
@@ -42,21 +45,19 @@ jobs:
       - name: CLI version
         run: azion --version
 
-		# Configure a personal token in your github secrets
-		# You may create a personal token by running 'azion create personal-token'
+      # Requires an AZION_PERSONAL_TOKEN repository secret.
+      # Create one locally with: azion create personal-token
       - name: Configure token
         run: |
-          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}  
+          azion -t ${{ secrets.AZION_PERSONAL_TOKEN }}
           azion whoami
 
       - name: Azion Build
-        run: |
-          azion build
+        run: azion build
 
-      # You may add the --sync flag to sync local and remote resources
+      # Add the --sync flag to reconcile local and remote resources.
       - name: Azion Deploy
-        run: |
-          azion deploy --local --debug
+        run: azion deploy --local --debug
 
       - name: Commit Azion files
         run: |

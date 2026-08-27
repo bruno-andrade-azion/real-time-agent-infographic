@@ -1,8 +1,11 @@
 {
-  "name": "whiteboard-realtimeagent",
+  "name": "real-time-agent-infographic",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
+  "description": "An interactive architecture board for a distributed security agent, built with React Flow and the Azion design system.",
+  "license": "MIT",
+  "packageManager": "pnpm@10.33.2",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

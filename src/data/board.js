@@ -309,7 +309,7 @@ export const nodes = [
     position: { x: 300, y: 1180 },
     style: { width: 1430 },
     data: {
-      label: 'honesty checkpoint 03 · the most important line in this video',
+      label: 'honesty checkpoint 03 · the one that matters most',
       sigil: '★',
       body:
         'The loop itself — <b>polling signals, prompting the model, parsing the tool call, deciding</b> — is code <b>you</b> write, in Azion Functions.<br/><br/>' +
@@ -506,10 +506,10 @@ export const nodes = [
       kicker: 'build one action path first',
       title: 'Your move',
       items: [
-        'Docs for every product — links below',
-        'Companion repo — clone it, run <b>node dryrun.js</b>',
-        'Free account → wire <b>one</b> action: ASN → Network List, from a Function',
-        'Comment: what would you let it do automatically — and what stays gated?',
+        'Wire <b>one</b> action end to end: ASN → Network List, from a Function',
+        'Gate the broad blocks. Let the reversible ones run.',
+        'Ship the audit trail <b>before</b> the autonomy',
+        'The products are real. The loop and the guardrails are yours to build.',
       ],
     },
   },
