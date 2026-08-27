@@ -1,0 +1,63 @@
+{
+  "name": "whiteboard-real-time-agent",
+  "bucket": "whiteboard-real-time-agent",
+  "preset": "react",
+  "env": "production",
+  "prefix": "20260826195042",
+  "rotate-prefix": true,
+  "not-first-run": true,
+  "function": [],
+  "application": {
+    "id": 1787787680,
+    "name": "whiteboard-real-time-agent"
+  },
+  "domain": {
+    "id": 0,
+    "name": "__DEFAULT__",
+    "domain_name": "",
+    "url": ""
+  },
+  "rt-purge": {
+    "purge_on_publish": true
+  },
+  "origin": null,
+  "rules-engine": {
+    "created": false,
+    "rules": [
+      {
+        "id": 686244,
+        "name": "Deliver Static Assets and Set Cache Policy",
+        "phase": "request"
+      },
+      {
+        "id": 686245,
+        "name": "Redirect to index.html",
+        "phase": "request"
+      }
+    ]
+  },
+  "cache-settings": [
+    {
+      "id": 332398,
+      "name": "whiteboard-real-time-agent"
+    }
+  ],
+  "workloads": {
+    "id": 1787783400,
+    "name": "whiteboard-real-time-agent",
+    "domains": [],
+    "url": "https://btbjhdtx6ko.map.azionedge.net",
+    "deployment_id": [
+      {
+        "id": 300208,
+        "name": "whiteboard-real-time-agent"
+      }
+    ]
+  },
+  "connectors": [
+    {
+      "id": 110745,
+      "name": "whiteboard-real-time-agent"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+/* Azion design system: Tailwind v4 + @aziontech/theme tokens, typography, fonts.
+   NOTE: DESIGN.md documents `@import '@aziontech/theme/globals.css'`, but
+   @aziontech/theme@4.3.0 only publishes the "." export, so we import the root. */
+@import '@aziontech/theme';
+@source "../../src";
+
+@import './board.css';

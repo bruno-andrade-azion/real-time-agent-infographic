@@ -1,0 +1,244 @@
+/* ============================================================
+   BOARD CHROME
+   ------------------------------------------------------------
+   Everything here is token-driven: no hex, rgb or hsl literals,
+   no Tailwind palette names, no hardcoded durations or curves.
+   Component-level typography / spacing / radius / shadow lives
+   in the JSX as theme utilities, per DESIGN.md.
+   ============================================================ */
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: var(--bg-canvas);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text-default);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------
+   Accent map — each surface picks one semantic role.
+   `--ac` is the ink, `--ac-border` the hairline, `--ac-fill` the wash.
+   ------------------------------------------------------------ */
+
+.acc-brand {
+  --ac: var(--primary);
+  --ac-border: var(--primary);
+  --ac-fill: var(--primary-mask);
+}
+.acc-ships {
+  --ac: var(--success-contrast);
+  --ac-border: var(--success-border);
+  --ac-fill: var(--success);
+}
+.acc-build {
+  --ac: var(--warning-contrast);
+  --ac-border: var(--warning-border);
+  --ac-fill: var(--warning);
+}
+.acc-danger {
+  --ac: var(--danger-contrast);
+  --ac-border: var(--danger-border);
+  --ac-fill: var(--danger);
+}
+.acc-signal {
+  --ac: var(--info-contrast);
+  --ac-border: var(--info-border);
+  --ac-fill: var(--info);
+}
+.acc-neutral {
+  --ac: var(--text-muted);
+  --ac-border: var(--border-default);
+  --ac-fill: var(--bg-surface-raised);
+}
+
+/* ------------------------------------------------------------
+   Canvas
+   ------------------------------------------------------------ */
+
+.board {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(
+      1200px 720px at 20% 10%,
+      color-mix(in srgb, var(--primary) 9%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      1000px 640px at 82% 88%,
+      color-mix(in srgb, var(--accent) 10%, transparent),
+      transparent 62%
+    ),
+    var(--bg-canvas);
+}
+
+/* vignette, click-through, above the canvas but below the HUD */
+.board::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    color-mix(in srgb, var(--bg-canvas) 78%, transparent) 100%
+  );
+}
+
+.react-flow {
+  background: transparent;
+}
+.react-flow__attribution {
+  display: none;
+}
+.react-flow__handle {
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+}
+.react-flow__node.nopointer {
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Reveal + emphasis choreography
+   ------------------------------------------------------------ */
+
+.react-flow__node,
+.react-flow__edge {
+  transition: opacity var(--transition-duration-slow-01) var(--ease-productive-entrance);
+}
+
+.react-flow__node.is-dim {
+  opacity: 0.14;
+}
+.react-flow__edge.is-dim {
+  opacity: 0.1;
+}
+
+@keyframes boardNodeIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--spacing-sm)) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Animate the node's inner element, never the react-flow node wrapper —
+   the wrapper's transform is how React Flow positions it on the canvas. */
+.react-flow__node.nd-in > * {
+  animation: boardNodeIn var(--transition-duration-slow-02) var(--ease-expressive-entrance) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .react-flow__node.nd-in > * {
+    animation: none;
+  }
+  .react-flow__node,
+  .react-flow__edge {
+    transition: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Shared surface: hairline + corner brackets
+   ------------------------------------------------------------ */
+
+.nd {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--bg-surface) 88%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.nd::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ac), transparent);
+}
+
+.nd-glow {
+  box-shadow:
+    var(--shadow-xl),
+    0 0 40px -12px color-mix(in srgb, var(--ac) 55%, transparent);
+}
+
+.cnr {
+  position: absolute;
+  width: var(--spacing-sm);
+  height: var(--spacing-sm);
+  border: 1px solid var(--ac);
+  opacity: 0.5;
+}
+.cnr-tl { top: 4px; left: 4px; border-right: 0; border-bottom: 0; }
+.cnr-tr { top: 4px; right: 4px; border-left: 0; border-bottom: 0; }
+.cnr-bl { bottom: 4px; left: 4px; border-right: 0; border-top: 0; }
+.cnr-br { bottom: 4px; right: 4px; border-left: 0; border-top: 0; }
+
+/* hazard hatch for honesty checkpoints */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--ac) 7%, transparent) 0 10px,
+    transparent 10px 20px
+  );
+}
+
+/* dashed guardrails ring */
+.ring-surface {
+  border: 2px dashed var(--ac-border);
+  background:
+    radial-gradient(
+      ellipse at 50% 0%,
+      color-mix(in srgb, var(--ac) 6%, transparent),
+      transparent 66%
+    );
+  box-shadow: inset 0 0 90px -30px color-mix(in srgb, var(--ac) 40%, transparent);
+}
+
+/* ------------------------------------------------------------
+   Edges
+   ------------------------------------------------------------ */
+
+.react-flow__edge-path {
+  stroke-linecap: round;
+}
+
+.edge-label {
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--bg-canvas);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-flow-dash {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   Scrollbar for the step index
+   ------------------------------------------------------------ */
+
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
